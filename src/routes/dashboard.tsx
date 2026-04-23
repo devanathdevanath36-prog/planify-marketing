@@ -19,12 +19,19 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
 });
 
-const nav = [
+type NavItem = {
+  to: "/dashboard" | "/dashboard/budget" | "/dashboard/campaigns" | "/dashboard/strategy";
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+};
+
+const nav: NavItem[] = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/dashboard/budget", label: "Budget Planner", icon: Wallet },
   { to: "/dashboard/campaigns", label: "Campaigns", icon: CalendarRange },
   { to: "/dashboard/strategy", label: "Strategy", icon: Compass },
-] as const;
+];
 
 function DashboardLayout() {
   const { state } = useStore();
