@@ -13,6 +13,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardStrategyRouteImport } from './routes/dashboard.strategy'
 import { Route as DashboardCampaignsRouteImport } from './routes/dashboard.campaigns'
 import { Route as DashboardBudgetRouteImport } from './routes/dashboard.budget'
 
@@ -36,6 +37,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardStrategyRoute = DashboardStrategyRouteImport.update({
+  id: '/strategy',
+  path: '/strategy',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardCampaignsRoute = DashboardCampaignsRouteImport.update({
   id: '/campaigns',
   path: '/campaigns',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/budget': typeof DashboardBudgetRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
+  '/dashboard/strategy': typeof DashboardStrategyRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard/budget': typeof DashboardBudgetRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
+  '/dashboard/strategy': typeof DashboardStrategyRoute
   '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/budget': typeof DashboardBudgetRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
+  '/dashboard/strategy': typeof DashboardStrategyRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/budget'
     | '/dashboard/campaigns'
+    | '/dashboard/strategy'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard/budget'
     | '/dashboard/campaigns'
+    | '/dashboard/strategy'
     | '/dashboard'
   id:
     | '__root__'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/budget'
     | '/dashboard/campaigns'
+    | '/dashboard/strategy'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -133,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/strategy': {
+      id: '/dashboard/strategy'
+      path: '/strategy'
+      fullPath: '/dashboard/strategy'
+      preLoaderRoute: typeof DashboardStrategyRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/campaigns': {
       id: '/dashboard/campaigns'
       path: '/campaigns'
@@ -153,12 +172,14 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteChildren {
   DashboardBudgetRoute: typeof DashboardBudgetRoute
   DashboardCampaignsRoute: typeof DashboardCampaignsRoute
+  DashboardStrategyRoute: typeof DashboardStrategyRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardBudgetRoute: DashboardBudgetRoute,
   DashboardCampaignsRoute: DashboardCampaignsRoute,
+  DashboardStrategyRoute: DashboardStrategyRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
