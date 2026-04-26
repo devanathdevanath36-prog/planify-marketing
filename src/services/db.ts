@@ -16,6 +16,11 @@ export type Row<T extends TableName> = Tables[T]["Row"];
 export type Insert<T extends TableName> = Tables[T]["Insert"];
 export type Update<T extends TableName> = Tables[T]["Update"];
 
+// PostgREST's generated types are narrow per-table; for a generic helper we
+// cast through a permissive alias. RLS still enforces real access at the DB.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const sb = supabase as unknown as any;
+
 export type ListOptions = {
   filters?: Record<string, string | number | boolean | null>;
   orderBy?: { column: string; ascending?: boolean };
@@ -36,10 +41,10 @@ export const db = {
     opts: ListOptions = {},
   ): Promise<{ data: Row<T>[]; count: number | null; error: string | null }> {
     try {
-      let q = supabase.from(table).select("*", { count: "exact" });
+      let q = sb.from(table as string).select("*", { count: "exact" });
       if (opts.filters) {
         for (const [k, v] of Object.entries(opts.filters)) {
-          q = v === null ? q.is(k, null) : q.eq(k, v as never);
+          q = v === null ? q.is(k, null) : q.eq(k, v);
         }
       }
       if (opts.search) {
@@ -55,7 +60,7 @@ export const db = {
       }
       const { data, error, count } = await q;
       if (error) throw error;
-      return { data: (data ?? []) as Row<T>[], count, error: null };
+      return { data: (data ?? []) as unknown as Row<T>[], count, error: null };
     } catch (e) {
       logError(`getAll:${String(table)}`, e);
       return { data: [], count: null, error: (e as Error).message };
@@ -67,9 +72,9 @@ export const db = {
     id: string,
   ): Promise<{ data: Row<T> | null; error: string | null }> {
     try {
-      const { data, error } = await supabase.from(table).select("*").eq("id", id).maybeSingle();
+      const { data, error } = await sb.from(table as string).select("*").eq("id", id).maybeSingle();
       if (error) throw error;
-      return { data: (data as Row<T> | null) ?? null, error: null };
+      return { data: (data as unknown as Row<T> | null) ?? null, error: null };
     } catch (e) {
       logError(`getById:${String(table)}`, e);
       return { data: null, error: (e as Error).message };
@@ -81,13 +86,13 @@ export const db = {
     payload: Insert<T>,
   ): Promise<{ data: Row<T> | null; error: string | null }> {
     try {
-      const { data, error } = await supabase
-        .from(table)
-        .insert(payload as never)
+      const { data, error } = await sb
+        .from(table as string)
+        .insert(payload)
         .select()
         .single();
       if (error) throw error;
-      return { data: data as Row<T>, error: null };
+      return { data: data as unknown as Row<T>, error: null };
     } catch (e) {
       logError(`createRecord:${String(table)}`, e);
       return { data: null, error: (e as Error).message };
@@ -100,14 +105,14 @@ export const db = {
     patch: Update<T>,
   ): Promise<{ data: Row<T> | null; error: string | null }> {
     try {
-      const { data, error } = await supabase
-        .from(table)
-        .update(patch as never)
+      const { data, error } = await sb
+        .from(table as string)
+        .update(patch)
         .eq("id", id)
         .select()
         .single();
       if (error) throw error;
-      return { data: data as Row<T>, error: null };
+      return { data: data as unknown as Row<T>, error: null };
     } catch (e) {
       logError(`updateRecord:${String(table)}`, e);
       return { data: null, error: (e as Error).message };
@@ -119,7 +124,7 @@ export const db = {
     id: string,
   ): Promise<{ error: string | null }> {
     try {
-      const { error } = await supabase.from(table).delete().eq("id", id);
+      const { error } = await sb.from(table as string).delete().eq("id", id);
       if (error) throw error;
       return { error: null };
     } catch (e) {
