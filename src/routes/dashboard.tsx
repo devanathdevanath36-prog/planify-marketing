@@ -1,4 +1,5 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import {
   LayoutDashboard,
   Wallet,
@@ -8,6 +9,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -35,7 +37,26 @@ const nav: NavItem[] = [
 
 function DashboardLayout() {
   const { state } = useStore();
+  const { user, loading, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/auth" });
+  }, [user, loading, navigate]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/" });
+  };
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-sm text-muted-foreground">Loading…</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -78,9 +99,13 @@ function DashboardLayout() {
               <p className="text-sm font-medium truncate">{state.user?.name ?? "Guest"}</p>
               <p className="text-xs text-muted-foreground truncate">{state.user?.email ?? "—"}</p>
             </div>
-            <Link to="/" className="text-muted-foreground hover:text-foreground" title="Sign out">
+            <button
+              onClick={handleSignOut}
+              className="text-muted-foreground hover:text-foreground"
+              title="Sign out"
+            >
               <LogOut className="h-4 w-4" />
-            </Link>
+            </button>
           </div>
         </div>
       </aside>
