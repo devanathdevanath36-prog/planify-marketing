@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/stratifyr-logo.jpg";
+import { useAuth } from "@/lib/auth";
 
 export function SiteHeader() {
+  const { user } = useAuth();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 backdrop-blur-xl bg-background/70">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -30,12 +32,20 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/auth">Sign in</Link>
-          </Button>
-          <Button asChild size="sm" className="bg-gradient-brand hover:opacity-90 shadow-glow">
-            <Link to="/dashboard">Get started</Link>
-          </Button>
+          {user ? (
+            <Button asChild size="sm" className="bg-gradient-brand hover:opacity-90 shadow-glow">
+              <Link to="/dashboard">Open dashboard</Link>
+            </Button>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/auth">Sign in</Link>
+              </Button>
+              <Button asChild size="sm" className="bg-gradient-brand hover:opacity-90 shadow-glow">
+                <Link to="/auth">Get started</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
