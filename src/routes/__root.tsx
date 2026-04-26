@@ -31,14 +31,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Stratifyr" },
+      { name: "description", content: "Stratifyr is a marketing planning platform designed for small business owners and entrepreneurs. It helps you manage your marketing budget, schedule campaigns," },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Stratifyr" },
+      { property: "og:description", content: "Stratifyr is a marketing planning platform designed for small business owners and entrepreneurs. It helps you manage your marketing budget, schedule campaigns," },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Stratifyr" },
+      { name: "twitter:description", content: "Stratifyr is a marketing planning platform designed for small business owners and entrepreneurs. It helps you manage your marketing budget, schedule campaigns," },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7pU9cfjxeUMRwb4GeYeGT8wnKM33/social-images/social-1777180792158-website_img_2.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7pU9cfjxeUMRwb4GeYeGT8wnKM33/social-images/social-1777180792158-website_img_2.webp" },
     ],
     links: [
       {
